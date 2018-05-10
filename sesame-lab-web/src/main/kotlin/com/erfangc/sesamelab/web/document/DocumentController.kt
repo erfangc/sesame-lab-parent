@@ -16,7 +16,7 @@ class DocumentController(private val dynamoDBDocumentService: DynamoDBDocumentSe
         return elasticsearchDocumentService.searchByCreator(creatorID = creatorID ?: principal?.name ?: "nobody")
     }
 
-    @GetMapping("by-com.erfangc.sesamelab.shared.corpus/{corpusID}")
+    @GetMapping("by-corpus/{corpusID}")
     fun byCorpus(@PathVariable corpusID: Long): List<Document> {
         return elasticsearchDocumentService.searchByCorpusID(corpusID = corpusID, modifiedAfter = null)
     }
