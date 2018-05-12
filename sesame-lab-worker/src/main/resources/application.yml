@@ -8,3 +8,6 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  datasource:
+      hikari:
+        maximum-pool-size: 3
