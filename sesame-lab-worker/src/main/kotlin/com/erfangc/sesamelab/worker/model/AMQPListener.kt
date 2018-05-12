@@ -1,4 +1,4 @@
-package com.erfang.sesamelab.worker.model
+package com.erfangc.sesamelab.worker.model
 
 import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.fasterxml.jackson.databind.ObjectMapper

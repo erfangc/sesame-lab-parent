@@ -1,4 +1,4 @@
-package com.erfang.sesamelab.worker.model
+package com.erfangc.sesamelab.worker.model
 
 import com.amazonaws.services.s3.AmazonS3
 import com.erfangc.sesamelab.shared.Corpus
