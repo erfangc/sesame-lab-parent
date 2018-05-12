@@ -1,10 +1,6 @@
-package com.erfangc.sesamelab.worker.model
+package com.erfangc.sesamelab.shared
 
 import com.amazonaws.services.s3.AmazonS3
-import com.erfangc.sesamelab.shared.Corpus
-import com.erfangc.sesamelab.shared.ElasticsearchDocumentService
-import com.erfangc.sesamelab.shared.NERModel
-import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.erfangc.sesamelab.shared.repositories.NERModelRepository
 import opennlp.tools.namefind.NameFinderME
 import opennlp.tools.namefind.NameSampleDataStream
@@ -45,6 +41,16 @@ class NERModelService(private val amazonS3: AmazonS3,
         val modelFilename = UUID.randomUUID().toString()
         val modifiedAfter = request.modifiedAfter
         val user = request.user
+        val nerModel = NERModel()
+                .setCreatedOn(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+                .setName(request.name)
+                .setModelFilename(modelFilename)
+                .setCorpus(Corpus().setId(request.corpusID))
+                .setUserID(user.id)
+                .setFileLocation("s3://$bucketName/$modelFilename.bin")
+                .setDescription(request.description)
+                .setStatus("Running")
+        nerModelRepository.save(nerModel)
 
         val trainingJSONs = elasticsearchDocumentService
                 .searchByCorpusID(corpusID = request.corpusID, modifiedAfter = Instant.ofEpochMilli(modifiedAfter))
@@ -61,17 +67,9 @@ class NERModelService(private val amazonS3: AmazonS3,
         val modelOutFile = File.createTempFile(modelFilename, ".bin")
         model.serialize(modelOutFile)
         amazonS3.putObject(bucketName, "$modelFilename.bin", modelOutFile)
+
         nerModelRepository
-                .save(
-                        NERModel()
-                                .setCreatedOn(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
-                                .setName(request.name)
-                                .setModelFilename(modelFilename)
-                                .setCorpus(Corpus().setId(request.corpusID))
-                                .setUserID(user.id)
-                                .setFileLocation("s3://$bucketName/$modelFilename.bin")
-                                .setDescription(request.description)
-                )
+                .save(nerModel.setStatus("Ready"))
         logger.info("Wrote model metadata into database")
         modelOutFile.delete()
         return modelFilename

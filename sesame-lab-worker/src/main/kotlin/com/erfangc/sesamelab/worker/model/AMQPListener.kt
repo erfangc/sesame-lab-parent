@@ -1,5 +1,6 @@
 package com.erfangc.sesamelab.worker.model
 
+import com.erfangc.sesamelab.shared.NERModelService
 import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue

@@ -1,5 +1,6 @@
 package com.erfangc.sesamelab.web.model
 
+import com.erfangc.sesamelab.shared.NERModelService
 import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.erfangc.sesamelab.web.user.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,6 +14,7 @@ import java.security.Principal
 @RequestMapping("api/v1/ner")
 class ModelController(private val userService: UserService,
                       private val objectMapper: ObjectMapper,
+                      private val nerModelService: NERModelService,
                       private val rabbitTemplate: RabbitTemplate) {
 
     @PostMapping("train")
@@ -39,7 +41,7 @@ class ModelController(private val userService: UserService,
     @GetMapping("{modelFilename}/run")
     fun run(@PathVariable modelFilename: String,
             @RequestParam sentence: String): String {
-        return "TODO"
+        return nerModelService.run(modelFilename, sentence)
     }
 
 }

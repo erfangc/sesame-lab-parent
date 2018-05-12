@@ -12,6 +12,7 @@ public class NERModel {
     private String description;
     private String userID;
     private String createdOn;
+    private String status;
     private String modelFilename;
     private String fileLocation;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -86,6 +87,15 @@ public class NERModel {
 
     public NERModel setModelFilename(String modelFilename) {
         this.modelFilename = modelFilename;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public NERModel setStatus(String status) {
+        this.status = status;
         return this;
     }
 }
