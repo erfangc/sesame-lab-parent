@@ -5,6 +5,7 @@ import com.auth0.client.mgmt.ManagementAPI
 import com.auth0.client.mgmt.filter.UserFilter
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.spring.security.api.authentication.AuthenticationJsonWebToken
+import com.erfangc.sesamelab.shared.User
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.security.Principal

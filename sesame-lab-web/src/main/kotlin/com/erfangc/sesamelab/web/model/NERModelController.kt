@@ -1,38 +1,39 @@
 package com.erfangc.sesamelab.web.model
 
-import com.erfangc.sesamelab.shared.repositories.NERModelRepository
+import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.erfangc.sesamelab.web.user.UserService
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @CrossOrigin
 @RestController
 @RequestMapping("api/v1/ner")
-class ModelController(private val trainingService: NERModelService,
-                      private val userService: UserService,
-                      private val nerModelRepository: NERModelRepository) {
+class ModelController(private val userService: UserService,
+                      private val rabbitTemplate: RabbitTemplate) {
 
     @PostMapping("train")
     fun train(@RequestParam corpusID: Long,
               @RequestParam(required = false) name: String?,
               @RequestParam(required = false) description: String?,
               @RequestParam(required = false) modifiedAfter: Long?,
-              principal: Principal?): String {
+              principal: Principal?): ResponseEntity<Any> {
         val user = userService.getUserFromAuthenticatedPrincipal(principal)
         val request = TrainNERModelRequest(
-                corpusID = corpusID,
-                modifiedAfter = modifiedAfter ?: 0L,
-                name = name ?: "default",
                 user = user,
-                description = description
-        )
-        return trainingService.train(request)
+                name = name ?: "No Name",
+                description = description ?: "No Description",
+                corpusID = corpusID,
+                modifiedAfter = modifiedAfter ?: 0)
+        rabbitTemplate.convertAndSend("train-ner-model", request)
+        return ResponseEntity.ok("")
     }
 
     @GetMapping("{modelFilename}/run")
     fun run(@PathVariable modelFilename: String,
             @RequestParam sentence: String): String {
-        return trainingService.run(modelFilename = modelFilename, sentence = sentence)
+        return "TODO"
     }
 
 }

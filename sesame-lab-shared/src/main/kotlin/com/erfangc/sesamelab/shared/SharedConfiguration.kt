@@ -1,38 +1,29 @@
-package com.erfangc.sesamelab.web
+package com.erfangc.sesamelab.shared
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
-import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.auth0.client.auth.AuthAPI
 import com.zaxxer.hikari.HikariDataSource
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpHost
 import org.apache.http.message.BasicHeader
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
+import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.URI
+import java.net.URISyntaxException
 import javax.sql.DataSource
 
+
 @Configuration
-class BeanConfiguration {
+open class SharedConfiguration {
     /*
     we are running on Heroku instead of directly on AWS EC2 or EBS
     we need to specify region specifically for S3 and DynamoDB instead of relying on instance profile
-     */
+    */
     private val region = System.getenv("AWS_REGION")
-    /*
-    needed to validate JWT tokens issued by our trusted authorization provider
-     */
-    private val issuer = System.getenv("AUTH0_ISSUER")
-    /*
-    client ID representing this server as an OAuth 2 client (this is NOT the same Client ID as the UI)
-     */
-    private val clientId = System.getenv("AUTH0_CLIENT_ID")
-    private val clientSecret = System.getenv("AUTH0_CLIENT_SECRET")
     /*
     Elasticsearch environment variables
      */
@@ -42,7 +33,7 @@ class BeanConfiguration {
     private val esScheme = System.getenv("ES_SCHEME")
 
     @Bean
-    fun restHighLevelClient(): RestHighLevelClient {
+    open fun restHighLevelClient(): RestHighLevelClient {
         return RestHighLevelClient(
                 RestClient
                         .builder(HttpHost(esHost, Integer.parseInt(esPort), esScheme))
@@ -51,15 +42,7 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun amazonDynamoDB(): AmazonDynamoDB {
-        return AmazonDynamoDBClientBuilder
-                .standard()
-                .withRegion(region)
-                .build()
-    }
-
-    @Bean
-    fun amazonS3(): AmazonS3 {
+    open fun amazonS3(): AmazonS3 {
         return AmazonS3ClientBuilder
                 .standard()
                 .withRegion(region)
@@ -67,7 +50,27 @@ class BeanConfiguration {
     }
 
     @Bean
-    fun dataSource(): DataSource {
+    open fun connectionFactory(): ConnectionFactory {
+        val rabbitMqUrl: URI
+        try {
+            rabbitMqUrl = URI(System.getenv("CLOUDAMQP_URL"))
+        } catch (e: URISyntaxException) {
+            throw RuntimeException(e)
+        }
+
+        val factory = CachingConnectionFactory()
+        factory.username = rabbitMqUrl.userInfo.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+        factory.setPassword(rabbitMqUrl.userInfo.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1])
+        factory.host = rabbitMqUrl.host
+        factory.port = rabbitMqUrl.port
+        factory.virtualHost = rabbitMqUrl.path.substring(1)
+
+        return factory
+    }
+
+
+    @Bean
+    open fun dataSource(): DataSource {
         val dbUri = URI(System.getenv("DATABASE_URL"))
         val username = dbUri.userInfo.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
         val password = dbUri.userInfo.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
@@ -80,14 +83,5 @@ class BeanConfiguration {
         return dataSource
     }
 
-    @Bean
-    fun dynamoDB(amazonDynamoDB: AmazonDynamoDB): DynamoDB {
-        return DynamoDB(amazonDynamoDB)
-    }
-
-    @Bean
-    fun authAPI(): AuthAPI {
-        return AuthAPI(issuer, clientId, clientSecret)
-    }
 
 }

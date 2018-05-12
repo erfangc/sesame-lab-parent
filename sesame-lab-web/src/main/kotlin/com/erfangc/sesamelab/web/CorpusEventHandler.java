@@ -1,7 +1,7 @@
 package com.erfangc.sesamelab.web;
 
 import com.erfangc.sesamelab.shared.Corpus;
-import com.erfangc.sesamelab.web.user.User;
+import com.erfangc.sesamelab.shared.User;
 import com.erfangc.sesamelab.web.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

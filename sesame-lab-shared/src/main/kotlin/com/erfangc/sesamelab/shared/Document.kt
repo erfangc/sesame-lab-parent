@@ -1,4 +1,4 @@
-package com.erfangc.sesamelab.web.document
+package com.erfangc.sesamelab.shared
 
 import java.time.Instant
 

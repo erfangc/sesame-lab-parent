@@ -1,10 +1,8 @@
-package com.erfangc.sesamelab.web.document
+package com.erfangc.sesamelab.shared
 
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import mock.providers.mockResponseFromResource
-import objectMapper
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.index.query.BoolQueryBuilder
 import org.elasticsearch.index.query.RangeQueryBuilder

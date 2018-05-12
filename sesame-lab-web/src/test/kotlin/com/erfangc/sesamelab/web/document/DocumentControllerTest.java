@@ -1,8 +1,8 @@
 package com.erfangc.sesamelab.web.document;
 
-import com.erfangc.sesamelab.web.user.User;
-import com.erfangc.sesamelab.web.user.UserService;
-import com.erfangc.sesamelab.web.user.User;
+import com.erfangc.sesamelab.shared.Document;
+import com.erfangc.sesamelab.shared.ElasticsearchDocumentService;
+import com.erfangc.sesamelab.shared.User;
 import com.erfangc.sesamelab.web.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;

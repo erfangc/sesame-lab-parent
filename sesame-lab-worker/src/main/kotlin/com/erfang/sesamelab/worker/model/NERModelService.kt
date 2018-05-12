@@ -1,9 +1,10 @@
-package com.erfangc.sesamelab.web.model
+package com.erfang.sesamelab.worker.model
 
 import com.amazonaws.services.s3.AmazonS3
-import com.erfangc.sesamelab.web.document.ElasticsearchDocumentService
 import com.erfangc.sesamelab.shared.Corpus
+import com.erfangc.sesamelab.shared.ElasticsearchDocumentService
 import com.erfangc.sesamelab.shared.NERModel
+import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.erfangc.sesamelab.shared.repositories.NERModelRepository
 import opennlp.tools.namefind.NameFinderME
 import opennlp.tools.namefind.NameSampleDataStream

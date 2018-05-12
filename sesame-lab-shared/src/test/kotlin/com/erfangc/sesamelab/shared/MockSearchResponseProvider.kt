@@ -1,8 +1,7 @@
-package mock.providers
+package com.erfangc.sesamelab.shared
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
-import objectMapper
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.common.bytes.BytesArray
 import org.elasticsearch.common.text.Text

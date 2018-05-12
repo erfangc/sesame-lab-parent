@@ -1,6 +1,6 @@
 package com.erfangc.sesamelab.web.dashboard
 
-import com.erfangc.sesamelab.web.user.User
+import com.erfangc.sesamelab.shared.User
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder

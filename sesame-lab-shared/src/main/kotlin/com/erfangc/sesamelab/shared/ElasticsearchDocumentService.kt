@@ -1,4 +1,4 @@
-package com.erfangc.sesamelab.web.document
+package com.erfangc.sesamelab.shared
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue

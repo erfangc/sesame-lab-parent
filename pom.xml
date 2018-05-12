@@ -21,6 +21,7 @@
         <kotlin.version>1.2.31</kotlin.version>
         <postgresql.version>42.1.4</postgresql.version>
         <aws-java-sdk-dynamodb.version>1.11.308</aws-java-sdk-dynamodb.version>
+        <aws-java-sdk-s3.version>1.11.308</aws-java-sdk-s3.version>
         <auth0.version>1.5.1</auth0.version>
         <auth0-spring-security-api.version>1.0.0</auth0-spring-security-api.version>
         <opennlp-tools.version>1.8.4</opennlp-tools.version>
