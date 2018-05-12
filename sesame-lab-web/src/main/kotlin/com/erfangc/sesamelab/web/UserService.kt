@@ -1,4 +1,4 @@
-package com.erfangc.sesamelab.web.user
+package com.erfangc.sesamelab.web
 
 import com.auth0.client.auth.AuthAPI
 import com.auth0.client.mgmt.ManagementAPI

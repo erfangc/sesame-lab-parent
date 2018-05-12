@@ -1,4 +1,4 @@
-package com.erfangc.sesamelab.shared;
+package com.erfangc.sesamelab.shared.entities;
 
 import javax.persistence.*;
 

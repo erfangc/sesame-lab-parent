@@ -1,6 +1,6 @@
 package com.erfangc.sesamelab.shared.repositories;
 
-import com.erfangc.sesamelab.shared.NERModel;
+import com.erfangc.sesamelab.shared.entities.NERModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

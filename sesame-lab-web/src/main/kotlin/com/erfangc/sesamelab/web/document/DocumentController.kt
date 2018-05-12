@@ -2,7 +2,7 @@ package com.erfangc.sesamelab.web.document
 
 import com.erfangc.sesamelab.shared.Document
 import com.erfangc.sesamelab.shared.ElasticsearchDocumentService
-import com.erfangc.sesamelab.web.user.UserService
+import com.erfangc.sesamelab.web.UserService
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 

@@ -1,6 +1,6 @@
 package com.erfangc.sesamelab.web.dashboard
 
-import com.erfangc.sesamelab.web.user.UserService
+import com.erfangc.sesamelab.web.UserService
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

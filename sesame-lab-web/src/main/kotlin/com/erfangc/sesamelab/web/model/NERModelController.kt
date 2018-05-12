@@ -2,7 +2,7 @@ package com.erfangc.sesamelab.web.model
 
 import com.erfangc.sesamelab.shared.NERModelService
 import com.erfangc.sesamelab.shared.TrainNERModelRequest
-import com.erfangc.sesamelab.web.user.UserService
+import com.erfangc.sesamelab.web.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.http.ResponseEntity

@@ -1,6 +1,6 @@
 package com.erfangc.sesamelab.shared.repositories;
 
-import com.erfangc.sesamelab.shared.Corpus;
+import com.erfangc.sesamelab.shared.entities.Corpus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
