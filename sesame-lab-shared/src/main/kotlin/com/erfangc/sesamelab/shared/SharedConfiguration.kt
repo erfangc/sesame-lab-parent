@@ -31,19 +31,14 @@ open class SharedConfiguration {
     we need to specify region specifically for S3 and DynamoDB instead of relying on instance profile
     */
     private val region = System.getenv("AWS_REGION")
-    /*
-    Elasticsearch environment variables
-     */
-    private val esAuthorization = System.getenv("ES_AUTHORIZATION")
-    private val esHost = System.getenv("ES_HOST")
-    private val esPort = System.getenv("ES_PORT")
-    private val esScheme = System.getenv("ES_SCHEME")
 
     @Bean
     open fun restHighLevelClient(): RestHighLevelClient {
+        val esAuthorization = System.getenv("ELASTICHSEARCH_AUTHORIZATION")
+        val uri = URI(System.getenv("ELASTICSEARCH_URL"))
         return RestHighLevelClient(
                 RestClient
-                        .builder(HttpHost(esHost, Integer.parseInt(esPort), esScheme))
+                        .builder(HttpHost(uri.host, uri.port, uri.scheme))
                         .setDefaultHeaders(arrayOf(BasicHeader(HttpHeaders.AUTHORIZATION, esAuthorization)))
         )
     }
