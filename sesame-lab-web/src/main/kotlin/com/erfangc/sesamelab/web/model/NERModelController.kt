@@ -2,6 +2,7 @@ package com.erfangc.sesamelab.web.model
 
 import com.erfangc.sesamelab.shared.TrainNERModelRequest
 import com.erfangc.sesamelab.web.user.UserService
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,6 +12,7 @@ import java.security.Principal
 @RestController
 @RequestMapping("api/v1/ner")
 class ModelController(private val userService: UserService,
+                      private val objectMapper: ObjectMapper,
                       private val rabbitTemplate: RabbitTemplate) {
 
     @PostMapping("train")
@@ -26,7 +28,11 @@ class ModelController(private val userService: UserService,
                 description = description ?: "No Description",
                 corpusID = corpusID,
                 modifiedAfter = modifiedAfter ?: 0)
-        rabbitTemplate.convertAndSend("train-ner-model", request)
+        rabbitTemplate
+                .convertAndSend(
+                        "train-ner-model",
+                        objectMapper.writeValueAsString(request)
+                )
         return ResponseEntity.ok("")
     }
 

@@ -8,6 +8,7 @@ import org.apache.http.HttpHost
 import org.apache.http.message.BasicHeader
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
+import org.springframework.amqp.core.Queue
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.context.annotation.Bean
@@ -19,6 +20,12 @@ import javax.sql.DataSource
 
 @Configuration
 open class SharedConfiguration {
+
+    @Bean
+    open fun queue(): Queue {
+        return Queue("train-ner-model", true)
+    }
+
     /*
     we are running on Heroku instead of directly on AWS EC2 or EBS
     we need to specify region specifically for S3 and DynamoDB instead of relying on instance profile
@@ -57,14 +64,8 @@ open class SharedConfiguration {
         } catch (e: URISyntaxException) {
             throw RuntimeException(e)
         }
-
         val factory = CachingConnectionFactory()
-        factory.username = rabbitMqUrl.userInfo.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-        factory.setPassword(rabbitMqUrl.userInfo.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1])
-        factory.host = rabbitMqUrl.host
-        factory.port = rabbitMqUrl.port
-        factory.virtualHost = rabbitMqUrl.path.substring(1)
-
+        factory.setUri(rabbitMqUrl)
         return factory
     }
 
