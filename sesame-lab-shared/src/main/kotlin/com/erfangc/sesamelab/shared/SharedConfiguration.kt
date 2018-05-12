@@ -76,6 +76,7 @@ open class SharedConfiguration {
         dataSource.jdbcUrl = jdbcUrl
         dataSource.password = password
         dataSource.driverClassName = "org.postgresql.Driver"
+        dataSource.maximumPoolSize = 3
         return dataSource
     }
 

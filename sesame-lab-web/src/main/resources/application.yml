@@ -11,6 +11,3 @@ spring:
   data:
     rest:
       base-path: /api/v1
-  datasource:
-    hikari:
-      maximum-pool-size: 3
