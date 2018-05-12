@@ -1,0 +1,58 @@
+{
+  "name": "sesame-lab",
+  "description": "the API server for sesame-lab",
+  "repository": "https://github.com/erfangc/sesame-lab-parent.git",
+  "env": {
+    "AUTH0_API_AUDIENCE": {
+      "description": "Auth0 audience value for this API server",
+      "required":  true
+    },
+    "AUTH0_CLIENT_ID": {
+      "description": "Auth0 client ID. This server is both a audience (API server) and a API consumer with a client ID",
+      "required":  true
+    },
+    "AUTH0_CLIENT_SECRET": {
+      "description": "Auth0 client secret for the given client ID",
+      "required":  true
+    },
+    "AUTH0_ISSUER": {
+      "description": "Auth0 trusted issuer URL for RSA verification of JWT token",
+      "required":  true
+    },
+    "AUTH0_MANAGEMENT_AUDIENCE": {
+      "description": "Auth0 Management API audience",
+      "required":  true
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "description": "AWS secret access key ID used to access DynamoDB and S3",
+      "required":  true
+    },
+    "AWS_REGION": {
+      "description": "AWS region",
+      "required":  true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "AWS secret access key used to access DynamoDB and S3",
+      "required":  true
+    },
+    "CLOUDAMQP_APIKEY": {
+      "required":  true
+    },
+    "CLOUDAMQP_URL": {
+      "description": "RabbitMQ URL use to communicate between web and worker processes",
+      "required":  true
+    },
+    "DATABASE_URL": {
+      "description": "Postgres URL used for JPA",
+      "required":  true
+    },
+    "ELASTICHSEARCH_AUTHORIZATION": {
+      "description": "Authorization Header used to authenticate with Elasticsearch cluster",
+      "required":  true
+    },
+    "ELASTICSEARCH_URL": {
+      "description": "Elasticsearch URL endpoint",
+      "required":  true
+    },
+  }
+}
