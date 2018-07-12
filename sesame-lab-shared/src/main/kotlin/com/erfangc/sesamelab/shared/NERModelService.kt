@@ -55,7 +55,7 @@ class NERModelService(private val amazonS3: AmazonS3,
         nerModelRepository.save(nerModel)
 
         val trainingJSONs = elasticsearchDocumentService
-                .searchByCorpusID(corpusID = request.corpusID, modifiedAfter = Instant.ofEpochMilli(modifiedAfter))
+                .searchByCorpusID(corpusID = request.corpusID, modifiedAfter = Instant.ofEpochMilli(modifiedAfter)).documents
         val text = trainingJSONs.joinToString("\n") { it.content.replace("\n", "") }
         val lineStream = PlainTextByLineStream({ ByteArrayInputStream(text.toByteArray()) }, StandardCharsets.UTF_8)
         val sampleStream = NameSampleDataStream(lineStream)

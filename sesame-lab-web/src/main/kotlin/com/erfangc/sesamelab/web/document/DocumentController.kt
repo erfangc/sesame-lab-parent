@@ -2,6 +2,7 @@ package com.erfangc.sesamelab.web.document
 
 import com.erfangc.sesamelab.shared.Document
 import com.erfangc.sesamelab.shared.ElasticsearchDocumentService
+import com.erfangc.sesamelab.shared.SearchCorpusResponse
 import com.erfangc.sesamelab.web.UserService
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -19,8 +20,8 @@ class DocumentController(private val dynamoDBDocumentService: DynamoDBDocumentSe
     }
 
     @GetMapping("by-corpus/{corpusID}")
-    fun byCorpus(@PathVariable corpusID: Long): List<Document> {
-        return elasticsearchDocumentService.searchByCorpusID(corpusID = corpusID, modifiedAfter = null)
+    fun byCorpus(@PathVariable corpusID: Long, @RequestParam(required = false) page: Int?): SearchCorpusResponse {
+        return elasticsearchDocumentService.searchByCorpusID(corpusID = corpusID, modifiedAfter = null, page = page)
     }
 
     @DeleteMapping("{id}")
