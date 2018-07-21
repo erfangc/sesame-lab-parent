@@ -54,26 +54,33 @@ class NERModelService(private val amazonS3: AmazonS3,
                 .setStatus("Running")
         nerModelRepository.save(nerModel)
 
-        val trainingJSONs = elasticsearchDocumentService
-                .searchByCorpusID(corpusID = request.corpusID, modifiedAfter = Instant.ofEpochMilli(modifiedAfter)).documents
-        val text = trainingJSONs.joinToString("\n") { it.content.replace("\n", "") }
-        val lineStream = PlainTextByLineStream({ ByteArrayInputStream(text.toByteArray()) }, StandardCharsets.UTF_8)
-        val sampleStream = NameSampleDataStream(lineStream)
-        val model = NameFinderME.train(
-                "en",
-                null,
-                sampleStream,
-                TrainingParameters.defaultParams(),
-                TokenNameFinderFactory()
-        )
-        val modelOutFile = File.createTempFile(modelFilename, ".bin")
-        model.serialize(modelOutFile)
-        amazonS3.putObject(bucketName, "$modelFilename.bin", modelOutFile)
+        try {
+            val trainingJSONs = elasticsearchDocumentService
+                    .searchByCorpusID(corpusID = request.corpusID, modifiedAfter = Instant.ofEpochMilli(modifiedAfter)).documents
+            val text = trainingJSONs.joinToString("\n") { it.content.replace("\n", "") }
+            val lineStream = PlainTextByLineStream({ ByteArrayInputStream(text.toByteArray()) }, StandardCharsets.UTF_8)
+            val sampleStream = NameSampleDataStream(lineStream)
+            val model = NameFinderME.train(
+                    "en",
+                    null,
+                    sampleStream,
+                    TrainingParameters.defaultParams(),
+                    TokenNameFinderFactory()
+            )
+            val modelOutFile = File.createTempFile(modelFilename, ".bin")
+            model.serialize(modelOutFile)
+            amazonS3.putObject(bucketName, "$modelFilename.bin", modelOutFile)
 
-        nerModelRepository
-                .save(nerModel.setStatus("Ready"))
-        logger.info("Wrote model metadata into database")
-        modelOutFile.delete()
+            nerModelRepository
+                    .save(nerModel.setStatus("Ready"))
+            logger.info("Wrote model metadata into database")
+            modelOutFile.delete()
+        } catch (e: Exception) {
+            nerModelRepository
+                    .save(nerModel.setStatus("Failed"))
+            throw RuntimeException(e)
+        }
+
         return modelFilename
     }
 
